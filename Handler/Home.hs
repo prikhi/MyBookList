@@ -1,40 +1,45 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Handler.Home where
 
 import Import
-import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3,
-                              withSmallInput)
 
--- This is a handler function for the GET request method on the HomeR
--- resource pattern. All of your resource patterns are defined in
--- config/routes
---
--- The majority of the code you will write in Yesod lives in these handler
--- functions. You can spread them across multiple files if you are so
--- inclined, or create a single monolithic file.
+import Data.List             (nub)
+import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3,
+                              bfs, withPlaceholder)
+
+
 getHomeR :: Handler Html
 getHomeR = do
-    (formWidget, formEnctype) <- generateFormPost sampleForm
-    let submission = Nothing :: Maybe (FileInfo, Text)
-        handlerName = "getHomeR" :: Text
+    wishlists <- runDB $ selectList [] []
+    wanted    <- getMostWantedBooks
+    (wishlistWidget, wishlistEnctype)         <- generateFormPost wishlistForm
     defaultLayout $ do
-        aDomId <- newIdent
-        setTitle "Welcome To Yesod!"
+        setTitle "Welcome To MyBookList!"
         $(widgetFile "homepage")
 
 postHomeR :: Handler Html
 postHomeR = do
-    ((result, formWidget), formEnctype) <- runFormPost sampleForm
-    let handlerName = "postHomeR" :: Text
-        submission = case result of
-            FormSuccess res -> Just res
-            _ -> Nothing
-
+    wishlists <- runDB $ selectList [] []
+    wanted    <- getMostWantedBooks
+    ((result, wishlistWidget), wishlistEnctype) <- runFormPost wishlistForm
+    case result of
+         FormSuccess wishlist -> do _ <- runDB (insert wishlist)
+                                    setMessage "Successfully added Wishlist"
+                                    redirect HomeR
+         _                    -> setMessage "Encountered an error while creating Wishlist"
     defaultLayout $ do
-        aDomId <- newIdent
-        setTitle "Welcome To Yesod!"
+        setTitle "Welcome To MyBookList!"
         $(widgetFile "homepage")
 
-sampleForm :: Form (FileInfo, Text)
-sampleForm = renderBootstrap3 BootstrapBasicForm $ (,)
-    <$> fileAFormReq "Choose a file"
-    <*> areq textField (withSmallInput "What's on the file?") Nothing
+getMostWantedBooks :: Handler [Book]
+getMostWantedBooks = runDB $ do
+    items     <- selectList [] []
+    let books = take 5 . nub . reverse . map (\(Entity _ i) -> wishlistItemBook i)
+              . sortBy (compare `on` (\(Entity _ i) -> wishlistItemPriority i))
+              $ items
+    mapM getJust books
+
+wishlistForm :: Form Wishlist
+wishlistForm = renderBootstrap3 BootstrapInlineForm $ Wishlist
+    <$> areq textField nameSettings Nothing
+    where nameSettings = withPlaceholder "Wishlist Name" $ bfs ("Name" :: Text)

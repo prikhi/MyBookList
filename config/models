@@ -3,10 +3,27 @@ User
     password Text Maybe
     UniqueUser ident
     deriving Typeable
+
 Email
     email Text
     user UserId Maybe
     verkey Text Maybe
     UniqueEmail email
 
- -- By default this file is used in Model.hs (which is imported by Foundation.hs)
+Book
+    isbn Text
+    title Text
+    author Text
+    UniqueIsbn isbn
+    deriving Eq
+
+Wishlist
+    name Text
+    UniqueWishlistName name
+    deriving Show
+
+WishlistItem
+    book BookId
+    wishlist WishlistId
+    WishlistBook wishlist book
+    priority Priority

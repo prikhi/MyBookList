@@ -25,5 +25,5 @@ database:
   database: "_env:PGDATABASE:MyBookList"
   poolsize: "_env:PGPOOLSIZE:10"
 
-copyright: 2015, CC BY-NC-SA 4.0
+copyright-year: "2015"
 #analytics: UA-YOURCODE

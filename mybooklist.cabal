@@ -19,8 +19,11 @@ library
                      Model
                      Settings
                      Settings.StaticFiles
+                     Types
                      Handler.Common
                      Handler.Home
+                     Handler.Wishlist
+                     Handler.WishlistDelete
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -80,6 +83,7 @@ library
                  , containers
                  , vector
                  , time
+                 , either
 
 executable         mybooklist
     if flag(library-only)

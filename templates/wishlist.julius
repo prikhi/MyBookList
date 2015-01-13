@@ -1,0 +1,4 @@
+$(document).ready(function () {
+    var tmp = "#{rawJS $ show $ fromEnum Medium + 1}";
+    $("select").val(tmp);
+});

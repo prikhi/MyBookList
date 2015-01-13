@@ -1,0 +1,15 @@
+<div .row>
+  <div .col-sm-12 .text-center>
+    <form method=post action=@{WishlistR name} enctype=#{enctype}
+          .form-inline>
+      ^{widget}
+      <button type=submit .btn .btn-primary>Add Book
+  <div .col-sm-12>
+    <hr>
+    $maybe books <- mBooks
+      <ul .list-group>
+      $forall (bookId, book) <- books
+        <li .list-group-item .text-center>
+          #{bookTitle book}
+          <small>[
+            <a href=@{WishlistDeleteR wishlistId bookId}>Delete</a>]
