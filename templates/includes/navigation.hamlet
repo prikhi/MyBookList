@@ -1,0 +1,15 @@
+<!-- Collapseable Bootstrap Navigation -->
+<nav .navbar .navbar-default>
+  <div .container>
+    <div .navbar-header>
+      <button type=button data-toggle=collapse data-target=#top-navbar-collapse-1
+              .navbar-toggle .collapsed>
+        <span .sr-only>Toggle navigation
+        <span .icon-bar>
+        <span .icon-bar>
+        <span .icon-bar>
+      <a href="/" .navbar-brand>MyBookList
+    <div #top-navbar-collapse-1 .collapse .navbar-collapse>
+      <ul .nav .navbar-nav>
+        <li>
+          <a href=@{HomeR}>Home

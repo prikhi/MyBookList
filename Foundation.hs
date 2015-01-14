@@ -44,7 +44,7 @@ instance Yesod App where
 
     -- Store session data on the client in encrypted cookies,
     -- default session idle timeout is 120 minutes
-    makeSessionBackend _ = fmap Just $ defaultClientSessionBackend
+    makeSessionBackend _ = Just <$> defaultClientSessionBackend
         120    -- timeout in minutes
         "config/client_session_key.aes"
 
@@ -57,9 +57,11 @@ instance Yesod App where
         -- default-layout-wrapper is the entire page. Since the final
         -- value passed to hamletToRepHtml cannot be a widget, this allows
         -- you to use normal widget features in default-layout.
-
+        theTitle <- pageTitle <$> widgetToPageContent widget
         pc <- widgetToPageContent $ do
             addStylesheet $ StaticR css_bootstrap_css
+            addScriptRemote "https://code.jquery.com/jquery-2.1.3.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
             $(widgetFile "default-layout")
         withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
@@ -124,8 +126,7 @@ instance YesodAuth App where
         x <- getBy $ UniqueUser $ credsIdent creds
         case x of
             Just (Entity uid _) -> return $ Just uid
-            Nothing -> do
-                fmap Just $ insert User
+            Nothing -> Just <$> insert User
                     { userIdent = credsIdent creds
                     , userPassword = Nothing
                     }
@@ -149,3 +150,6 @@ instance RenderMessage App FormMessage where
 -- https://github.com/yesodweb/yesod/wiki/Sending-email
 -- https://github.com/yesodweb/yesod/wiki/Serve-static-files-from-a-separate-domain
 -- https://github.com/yesodweb/yesod/wiki/i18n-messages-in-the-scaffolding
+
+nav :: Widget
+nav = $(widgetFile "includes/navigation")

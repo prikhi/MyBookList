@@ -17,6 +17,7 @@ library
                      Import
                      Import.NoFoundation
                      Model
+                     Model.Wishlist
                      Settings
                      Settings.StaticFiles
                      Types

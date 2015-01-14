@@ -9,13 +9,10 @@ $newline never
     <meta charset="UTF-8">
 
     <title>#{pageTitle pc} | MyBookList
-    <meta name="description" content="">
-    <meta name="author" content="">
 
+    <meta name="description" content="Track your book library and wishlists.">
+    <meta name="author" content="Pavan Rikhi">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <script src="https://code.jquery.com/jquery-2.1.3.min.js">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js">
 
     ^{pageHead pc}
 
@@ -25,25 +22,9 @@ $newline never
 
     <script>
       document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'js');
+
   <body>
-    <div class="container">
-      <header>
-        <a href=@{HomeR}>Home
-      <div id="page-header">
-        <h1>#{pageTitle pc}
-        <hr>
-      <div id="main" role="main">
-        ^{pageBody pc}
-      <br>
-      <footer .text-center>
-        <small>
-          <span .glyphicon .glyphicon-copyright-mark>
-          <strong>
-              \ #{appCopyrightYear $ appSettings master}
-          <br>
-          <em>
-            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_blank>
-              CC BY-NC-SA 4.0
+    ^{pageBody pc}
 
     $maybe analytics <- appAnalytics $ appSettings master
       <script>

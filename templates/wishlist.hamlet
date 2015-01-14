@@ -6,10 +6,12 @@
       <button type=submit .btn .btn-primary>Add Book
   <div .col-sm-12>
     <hr>
-    $maybe books <- mBooks
+    $if null books
+      <p>You haven't added anything to this wishlist yet.
+    $else
       <ul .list-group>
-      $forall (bookId, book) <- books
-        <li .list-group-item .text-center>
-          #{bookTitle book}
-          <small>[
-            <a href=@{WishlistDeleteR wishlistId bookId}>Delete</a>]
+        $forall (bookId, book) <- books
+          <li .list-group-item .text-center>
+            #{bookTitle book}
+            <small>[
+              <a href=@{WishlistDeleteR wishlistId bookId}>Delete</a>]

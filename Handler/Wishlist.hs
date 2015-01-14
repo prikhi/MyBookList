@@ -16,13 +16,7 @@ import Types                    (Priority(Medium))
 getWishlistR :: Text -> Handler Html
 getWishlistR name = do
     Entity wishlistId wishlist  <- runDB . getBy404 $ UniqueWishlistName name
-    items                       <- runDB $ selectList
-                                   [WishlistItemWishlist ==. wishlistId] []
-    mBooks                      <- liftM sequence $ mapM (\(Entity _ i) -> do
-                                        let bookId = wishlistItemBook i
-                                        book <- runDB $ getJust bookId
-                                        return $ Just (bookId, book)
-                                   ) items
+    books                       <- getBooksInWishlist wishlistId
     (widget, enctype)           <- generateFormPost bookForm
     defaultLayout $ do
         setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
@@ -30,27 +24,25 @@ getWishlistR name = do
 
 postWishlistR :: Text -> Handler Html
 postWishlistR name = do
-    Entity wishlistid _         <- runDB . getBy404 $ UniqueWishlistName name
+    Entity wishlistId wishlist  <- runDB . getBy404 $ UniqueWishlistName name
+    books                       <- getBooksInWishlist wishlistId
     ((result, widget), enctype) <- runFormPost bookForm
     case result of
         FormSuccess formInstance -> do
             bookid <- fromMaybe (error "create failed") <$>
-                      (createBookFromIsbn $ fst formInstance)
-            mItem  <- runDB $ getBy $ WishlistBook wishlistid bookid
+                      createBookFromIsbn (fst formInstance)
+            mItem  <- runDB $ getBy $ WishlistBook wishlistId bookid
             case mItem of
                  Just _  -> setMessage "That Book is already in your Wishlist"
-                 Nothing -> (runDB $ insert $ WishlistItem bookid wishlistid
+                 Nothing -> runDB (insert $ WishlistItem bookid wishlistId
                                             $ snd formInstance)
                          >> setMessage "Added Book to your Wishlist"
             redirect $ WishlistR name
-        _                -> defaultLayout [whamlet|
-<p>Invalid input, let's please try again:
-<form method=post action=@{WishlistR name} enctype=#{enctype}>
-    ^{widget}
-    <button type=submit .form-group .btn .btn-default>Submit
-|]
+        _                -> defaultLayout $ do
+            setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
+            $(widgetFile "wishlist")
 
-createBookFromIsbn :: Text -> Handler (Maybe (BookId))
+createBookFromIsbn :: Text -> Handler (Maybe BookId)
 createBookFromIsbn i = do
     mMetadata <- getMetadataFromIsbn i
     case mMetadata of
@@ -103,7 +95,7 @@ instance FromJSON a => FromJSON (XIsbnResponse a) where
 instance FromJSON XIsbnBookMetadata where
     parseJSON (Object o) = do
         (authors :: [HashMap Text Value]) <- o .: "author_data"
-        authorName <- (unsafeHead authors) .: "name"
+        authorName <- unsafeHead authors .: "name"
         XIsbnBookMetadata authorName <$> o .: "title" <*> o.: "isbn13"
     parseJSON _ = error "Received invalid Book Metadata from xisbn."
 
