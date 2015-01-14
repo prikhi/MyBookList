@@ -52,12 +52,18 @@ instance Yesod App where
         master <- getYesod
         mmsg <- getMessage
 
+        -- Site-widge Widgets & Variables
+        theTitle <- pageTitle <$> widgetToPageContent widget
+        let navigationWidget :: Widget
+            navigationWidget = $(widgetFile "includes/navigation")
+            footerWidget :: Widget
+            footerWidget     = $(widgetFile "includes/footer")
+
         -- We break up the default layout into two components:
         -- default-layout is the contents of the body tag, and
         -- default-layout-wrapper is the entire page. Since the final
         -- value passed to hamletToRepHtml cannot be a widget, this allows
         -- you to use normal widget features in default-layout.
-        theTitle <- pageTitle <$> widgetToPageContent widget
         pc <- widgetToPageContent $ do
             addStylesheet $ StaticR css_bootstrap_css
             addScriptRemote "https://code.jquery.com/jquery-2.1.3.min.js"
@@ -150,6 +156,3 @@ instance RenderMessage App FormMessage where
 -- https://github.com/yesodweb/yesod/wiki/Sending-email
 -- https://github.com/yesodweb/yesod/wiki/Serve-static-files-from-a-separate-domain
 -- https://github.com/yesodweb/yesod/wiki/i18n-messages-in-the-scaffolding
-
-nav :: Widget
-nav = $(widgetFile "includes/navigation")

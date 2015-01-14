@@ -1,0 +1,10 @@
+<hr #pre-footer-rule>
+<footer .text-center>
+  <small>
+    <span .glyphicon .glyphicon-copyright-mark>
+    <strong>
+        \ #{appCopyrightYear $ appSettings master}
+    <br>
+    <em>
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_blank>
+        CC BY-NC-SA 4.0
