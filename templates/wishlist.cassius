@@ -1,0 +1,3 @@
+/* Remove the top margin - the panels provide an equal bottom margin. */
+hr#form-panel-rule
+  margin-top: 0

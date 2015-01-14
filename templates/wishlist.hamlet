@@ -1,11 +1,23 @@
 <div .row>
-  <div .col-sm-12 .text-center>
-    <form method=post action=@{WishlistR name} enctype=#{enctype}
-          .form-inline>
-      ^{widget}
-      <button type=submit .btn .btn-primary>Add Book
+  <!-- Add Book Panel -->
+  <div .col-sm-9 .col-md-offset-2 .col-md-6 .text-center>
+    <div .panel .panel-default>
+      <div .panel-body>
+        <form method=post action=@{WishlistR name} enctype=#{addBookEnctype}
+              .form-inline>
+          ^{addBookWidget}
+          <button type=submit .btn .btn-primary>Add Book
+  <!-- Button Panel -->
+  <div .col-sm-3 .col-md-2 .text-center>
+    <div .panel .panel-default>
+      <div .panel-body>
+        <button type=button data-toggle=modal data-target=#delete-modal .btn
+                .btn-danger>Delete
+  <div .col-hidden-xs .col-hidden-sm .col-md-2>
   <div .col-sm-12>
-    <hr>
+    <hr #form-panel-rule>
+  <!-- Book List -->
+  <div .col-sm-12>
     $if null books
       <p>You haven't added anything to this wishlist yet.
     $else
@@ -15,3 +27,20 @@
             #{bookTitle book}
             <small>[
               <a href=@{WishlistItemDeleteR wishlistId bookId}>Delete</a>]
+
+<!-- Delete Modal -->
+<div tabindex=-1 role=dialog aria-labelledby=delete-modal-label
+     aria-hidden=true #delete-modal .modal .fade>
+  <div .modal-dialog>
+    <div .modal-content>
+      <div .modal-header>
+        <button type=button data-dismiss=modal aria-label=Close .close>
+          <span aria-hidden=true>&times;
+        <h4 #delete-modal-label .modal-title>Delete Wishlist?
+      <div .modal-body>
+        <p>
+          Are you sure you want to delete this wishlist? You will not be able
+          to recover it.
+      <div .modal-footer>
+        <button type=button data-dismiss=modal .btn .btn-default>Close
+        <a href=@{WishlistDeleteR wishlistId} .btn .btn-danger>Delete

@@ -37,6 +37,7 @@ library
                      Handler.Common
                      Handler.Home
                      Handler.Wishlist
+                     Handler.WishlistDelete
                      Handler.WishlistItemDelete
 
     if flag(dev) || flag(library-only)

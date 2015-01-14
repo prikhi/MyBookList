@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // Set default Priority for new forms
     var tmp = "#{rawJS $ show $ fromEnum Medium + 1}";
     $("select").val(tmp);
 });

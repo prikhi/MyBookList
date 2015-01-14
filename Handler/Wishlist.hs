@@ -7,7 +7,7 @@ import Data.Aeson               (decode)
 import Data.Maybe               (fromJust)
 import qualified Data.Text as T
 import Network.HTTP.Conduit     (simpleHttp)
-import Text.Julius              (rawJS)
+import Text.Julius              (rawJS, juliusFile)
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout(..), renderBootstrap3, bfs,
                               withPlaceholder)
 
@@ -15,18 +15,19 @@ import Types                    (Priority(Medium))
 
 getWishlistR :: Text -> Handler Html
 getWishlistR name = do
-    Entity wishlistId wishlist  <- runDB . getBy404 $ UniqueWishlistName name
-    books                       <- getBooksInWishlist wishlistId
-    (widget, enctype)           <- generateFormPost bookForm
+    Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
+    books                      <- getBooksInWishlist wishlistId
+    (addBookWidget, addBookEnctype) <- generateFormPost bookForm
     defaultLayout $ do
         setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
+        toWidget $(juliusFile "templates/wishlistGet.julius")
         $(widgetFile "wishlist")
 
 postWishlistR :: Text -> Handler Html
 postWishlistR name = do
-    Entity wishlistId wishlist  <- runDB . getBy404 $ UniqueWishlistName name
-    books                       <- getBooksInWishlist wishlistId
-    ((result, widget), enctype) <- runFormPost bookForm
+    Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
+    books                      <- getBooksInWishlist wishlistId
+    ((result, addBookWidget), addBookEnctype)   <- runFormPost bookForm
     case result of
         FormSuccess formInstance -> do
             bookid <- fromMaybe (error "create failed") <$>
