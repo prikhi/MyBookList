@@ -1,7 +1,20 @@
-name:              mybooklist
-version:           0.0.0
-cabal-version:     >= 1.8
-build-type:        Simple
+name:               mybooklist
+version:            0.1.0
+synopsis:           Track your book library and wishlists.
+description:        Track your book library and wishlists.
+homepage:           http://bugs.sleepanarchy.com/projects/mybooklist
+license:            GPL-3
+license-file:       LICENSE
+author:             Pavan Rikhi
+maintainer:         pavan@sleepanarchy.com
+copyright:          2015
+category:           Web
+cabal-version:      >= 1.8
+build-type:         Simple
+
+source-repository head
+    type:              git
+    location:          git@bugs.sleepanarchy.com/mybooklist.git
 
 Flag dev
     Description:   Turn on development settings, like auto-reload templates.
