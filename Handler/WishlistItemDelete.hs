@@ -1,9 +1,9 @@
-module Handler.WishlistDelete where
+module Handler.WishlistItemDelete where
 
 import Import
 
-getWishlistDeleteR :: WishlistId -> BookId -> Handler Html
-getWishlistDeleteR listId bookId = do
+getWishlistItemDeleteR :: WishlistId -> BookId -> Handler Html
+getWishlistItemDeleteR listId bookId = do
     list <- runDB $ getJust listId
     runDB . deleteBy $ WishlistBook listId bookId
     setMessage "Removed Book from Wishlist"

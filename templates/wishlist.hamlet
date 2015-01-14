@@ -14,4 +14,4 @@
           <li .list-group-item .text-center>
             #{bookTitle book}
             <small>[
-              <a href=@{WishlistDeleteR wishlistId bookId}>Delete</a>]
+              <a href=@{WishlistItemDeleteR wishlistId bookId}>Delete</a>]

@@ -6,4 +6,4 @@
 
 / HomeR GET POST
 /wishlist/view/#Text WishlistR GET POST
-/wishlist/delete/#WishlistId/#BookId WishlistDeleteR GET
+/wishlist/delete/#WishlistId/#BookId WishlistItemDeleteR GET
