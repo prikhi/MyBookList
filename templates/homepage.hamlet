@@ -1,60 +1,59 @@
-<div .container>
-  <div .row>
-    <div .col-sm-6>
-      <h2>Library
-      <div .well>
-        <div .row>
-          <div .col-sm-12>
-            <div .panel .panel-default>
-              <div .panel-heading>
-                <h3 .panel-title>In Progress
-              <div .panel-body>
-          <div .col-sm-12>
-            <div .panel .panel-default>
-              <div .panel-heading>
-                <h3 .panel-title>Just Finished
-              <div .panel-body>
-          <div .col-sm-12>
-            <div .panel .panel-default>
-              <div .panel-heading>
-                <h3 .panel-title>Newly Added
-              <div .panel-body>
-    <div .col-sm-6>
-      <h2>Wishlists
-      <div .well>
-        <div .row>
-          <div .col-sm-12>
-            <div .panel .panel-default>
-              <div .panel-heading>
-                <h3 .panel-title>Create
-              <div .panel-body .text-center>
-                <form method=post action=@{HomeR} enctype=#{wishlistEnctype}
-                      .form-inline>
-                  <div .form-group>
-                    ^{wishlistWidget}
-                  <button type=submit .btn .btn-default>Add Wishlist
-          <div .col-sm-12>
-            <div .panel .panel-default>
-              <div .panel-heading>
-                <h3 .panel-title>Most Wanted
-              <div .panel-body>
-                $if null wanted
-                  <p>We couldn't find a book in any of your wishlists.
-                $else
-                  <ul .list-group>
-                    $forall book <- wanted
-                      <li .list-group-item .text-center>
-                        #{bookTitle book}
-          <div .col-sm-12>
-            <div .panel .panel-default>
-              <div .panel-heading>
-                <h3 .panel-title>Browse
-              <div .panel-body>
-                $if null wishlists
-                  <p>No wishlists found.
-                $else
-                  <ul .list-group>
-                    $forall Entity _ wishlist <- wishlists
-                      <li .list-group-item .text-center>
-                        <a href=@{WishlistR $ wishlistName wishlist}>
-                          #{wishlistName wishlist}
+<div .row>
+  <div .col-sm-6>
+    <h2>Library
+    <div .well>
+      <div .row>
+        <div .col-sm-12>
+          <div .panel .panel-default>
+            <div .panel-heading>
+              <h3 .panel-title>In Progress
+            <div .panel-body>
+        <div .col-sm-12>
+          <div .panel .panel-default>
+            <div .panel-heading>
+              <h3 .panel-title>Just Finished
+            <div .panel-body>
+        <div .col-sm-12>
+          <div .panel .panel-default>
+            <div .panel-heading>
+              <h3 .panel-title>Newly Added
+            <div .panel-body>
+  <div .col-sm-6>
+    <h2>Wishlists
+    <div .well>
+      <div .row>
+        <div .col-sm-12>
+          <div .panel .panel-default>
+            <div .panel-heading>
+              <h3 .panel-title>Create
+            <div .panel-body .text-center>
+              <form method=post action=@{HomeR} enctype=#{wishlistEnctype}
+                    .form-inline>
+                <div .form-group>
+                  ^{wishlistWidget}
+                <button type=submit .btn .btn-default>Add Wishlist
+        <div .col-sm-12>
+          <div .panel .panel-default>
+            <div .panel-heading>
+              <h3 .panel-title>Most Wanted
+            <div .panel-body>
+              $if null wanted
+                <p>We couldn't find a book in any of your wishlists.
+              $else
+                <ul .list-group>
+                  $forall book <- wanted
+                    <li .list-group-item .text-center>
+                      #{bookTitle book}
+        <div .col-sm-12>
+          <div .panel .panel-default>
+            <div .panel-heading>
+              <h3 .panel-title>Browse
+            <div .panel-body>
+              $if null wishlists
+                <p>No wishlists found.
+              $else
+                <ul .list-group>
+                  $forall Entity _ wishlist <- wishlists
+                    <li .list-group-item .text-center>
+                      <a href=@{WishlistR $ wishlistName wishlist}>
+                        #{wishlistName wishlist}
