@@ -52,11 +52,10 @@ instance Yesod App where
         master <- getYesod
         mmsg <- getMessage
 
-        -- Site-widge Widgets & Variables
+        -- Site-Wide Variables/Widgets
         theTitle <- pageTitle <$> widgetToPageContent widget
-        let navigationWidget :: Widget
-            navigationWidget = $(widgetFile "includes/navigation")
-            footerWidget :: Widget
+        let navigationWidget = $(widgetFile "includes/navigation")
+            messageWidget    = $(widgetFile "includes/messages")
             footerWidget     = $(widgetFile "includes/footer")
 
         -- We break up the default layout into two components:

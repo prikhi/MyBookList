@@ -1,0 +1,5 @@
+$maybe msg <- mmsg
+  <div role=alert .alert .alert-info .alert-dismissible>
+    <button type=button data-dismiss=alert aria-label=Close .close>
+      <span aria-hidden=true>&times;
+    <p>#{msg}

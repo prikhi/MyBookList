@@ -1,11 +1,12 @@
+<a href=#main .sr-only .sr-only-focusable>
+  Skip to main content
 <header>
   ^{navigationWidget}
 <div .container>
   <div #page-header>
     <h1>#{theTitle}
     <hr>
+  ^{messageWidget}
   <div id="main" role="main">
-    $maybe msg <- mmsg
-      <div #message>#{msg}
     ^{widget}
 ^{footerWidget}
