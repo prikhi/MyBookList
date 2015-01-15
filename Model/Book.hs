@@ -2,13 +2,9 @@
 module Model.Book where
 
 import ClassyPrelude.Yesod
-import qualified Data.Text as T
 import Foundation
-import Yesod.Form.Bootstrap3 (BootstrapFormLayout(..), renderBootstrap3, bfs,
-                              withPlaceholder)
 
 import Model
-import Types                 (Priority)
 import Util.Isbn             (getMetadataFromIsbn, ISBNdbBookMetadata(..))
 
 
@@ -26,16 +22,3 @@ createBookFromIsbn i = do
                                         (title bookMeta) (author bookMeta)
                                   return $ Just x
         Nothing       -> return Nothing
-
-
--- | A Form for validating creation of Books from only an ISBN.
-bookForm :: Form (Text, Priority)
-bookForm = renderBootstrap3 BootstrapInlineForm $ (,)
-    <$> areq isbnField isbnSettings Nothing
-    <*> areq (selectField optionsEnum) (bfs ("Priority" :: Text)) Nothing
-    where isbnField    = check validateIsbn textField
-          isbnSettings = withPlaceholder "ISBN" $ bfs ("ISBN" :: Text)
-          validateIsbn i
-              | length i `elem` [10, 13, 14] = Right $ T.filter (/= '-') i
-              | otherwise                    = Left (isbnError :: Text)
-          isbnError    = "Incorrect ISBN Length"

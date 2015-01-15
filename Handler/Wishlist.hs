@@ -13,7 +13,7 @@ getWishlistR :: Text -> Handler Html
 getWishlistR name = do
     Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
     books                      <- getBooksInWishlist wishlistId
-    (addBookWidget, addBookEnctype) <- generateFormPost bookForm
+    (addBookWidget, addBookEnctype) <- generateFormPost wishlistItemForm
     defaultLayout $ do
         setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
         toWidget $(juliusFile "templates/wishlistGet.julius")
@@ -24,7 +24,7 @@ postWishlistR :: Text -> Handler Html
 postWishlistR name = do
     Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
     books                      <- getBooksInWishlist wishlistId
-    ((result, addBookWidget), addBookEnctype)   <- runFormPost bookForm
+    ((result, addBookWidget), addBookEnctype)   <- runFormPost wishlistItemForm
     case result of
         FormSuccess formInstance -> do
             bookid <- fromMaybe (error "create failed") <$>

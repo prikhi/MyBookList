@@ -3,10 +3,8 @@ module Handler.Home where
 
 import Import
 
-import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3,
-                              bfs, withPlaceholder)
 
-
+-- | Show a dashboard containing an overview of wishlists & the library.
 getHomeR :: Handler Html
 getHomeR = do
     wishlists <- runDB $ selectList [] []
@@ -16,6 +14,7 @@ getHomeR = do
         setTitle "Welcome To MyBookList!"
         $(widgetFile "homepage")
 
+-- | Process the Create Wishlist form.
 postHomeR :: Handler Html
 postHomeR = do
     wishlists <- runDB $ selectList [] []
@@ -29,8 +28,3 @@ postHomeR = do
     defaultLayout $ do
         setTitle "Welcome To MyBookList!"
         $(widgetFile "homepage")
-
-wishlistForm :: Form Wishlist
-wishlistForm = renderBootstrap3 BootstrapInlineForm $ Wishlist
-    <$> areq textField nameSettings Nothing
-    where nameSettings = withPlaceholder "Wishlist Name" $ bfs ("Name" :: Text)
