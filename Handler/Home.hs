@@ -3,7 +3,6 @@ module Handler.Home where
 
 import Import
 
-import Data.List             (nub)
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3,
                               bfs, withPlaceholder)
 
@@ -30,14 +29,6 @@ postHomeR = do
     defaultLayout $ do
         setTitle "Welcome To MyBookList!"
         $(widgetFile "homepage")
-
-getMostWantedBooks :: Handler [Book]
-getMostWantedBooks = runDB $ do
-    items     <- selectList [] []
-    let books = take 5 . nub . reverse . map (\(Entity _ i) -> wishlistItemBook i)
-              . sortBy (compare `on` (\(Entity _ i) -> wishlistItemPriority i))
-              $ items
-    mapM getJust books
 
 wishlistForm :: Form Wishlist
 wishlistForm = renderBootstrap3 BootstrapInlineForm $ Wishlist

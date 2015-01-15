@@ -30,10 +30,12 @@ library
                      Import
                      Import.NoFoundation
                      Model
+                     Model.Book
                      Model.Wishlist
                      Settings
                      Settings.StaticFiles
                      Types
+                     Util.Isbn
                      Handler.Common
                      Handler.Home
                      Handler.Wishlist
