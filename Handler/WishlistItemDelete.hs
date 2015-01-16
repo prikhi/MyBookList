@@ -1,6 +1,6 @@
 module Handler.WishlistItemDelete where
 
-import Import
+import           Import
 
 
 -- | Delete the given WishlistItem.

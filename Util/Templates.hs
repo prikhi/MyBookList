@@ -1,8 +1,8 @@
 -- | The module contains utility functions commonly used in Templates.
 module Util.Templates where
 
-import ClassyPrelude
-import qualified Data.Text as T
+import           ClassyPrelude
+import qualified Data.Text     as T
 
 
 -- | Return a singlular or pluralized string depending on the value of n.

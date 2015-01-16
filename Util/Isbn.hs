@@ -3,11 +3,11 @@
 -- fetching metadata and converting to ISBN-13s.
 module Util.Isbn where
 
-import ClassyPrelude.Yesod
-import Data.Aeson               (decode)
-import Data.Maybe               (fromJust)
-import qualified Data.Text as T
-import Network.HTTP.Conduit     (simpleHttp)
+import           ClassyPrelude.Yesod
+import           Data.Aeson           (decode)
+import           Data.Maybe           (fromJust)
+import qualified Data.Text            as T
+import           Network.HTTP.Conduit (simpleHttp)
 
 
 -- | Attempt to retrieve a Book's metadata(title, author, etc.) from it's

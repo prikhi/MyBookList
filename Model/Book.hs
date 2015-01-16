@@ -1,11 +1,12 @@
 -- | This module contains functions & forms related to the Book model
 module Model.Book where
 
-import ClassyPrelude.Yesod
-import Foundation
+import           ClassyPrelude.Yesod
+import           Foundation
 
-import Model
-import Util.Isbn             (getMetadataFromIsbn, ISBNdbBookMetadata(..))
+import           Model
+import           Util.Isbn           (ISBNdbBookMetadata (..),
+                                      getMetadataFromIsbn)
 
 
 -- | Create a new Book from an ISBN, pulling information from an ISBN

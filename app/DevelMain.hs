@@ -23,13 +23,13 @@
 
 module DevelMain where
 
-import Application (getApplicationDev)
+import           Application              (getApplicationDev)
 
-import Control.Exception (finally)
-import Control.Concurrent
-import Data.IORef
-import Foreign.Store
-import Network.Wai.Handler.Warp
+import           Control.Concurrent
+import           Control.Exception        (finally)
+import           Data.IORef
+import           Foreign.Store
+import           Network.Wai.Handler.Warp
 
 -- | Start or restart the server.
 -- A Store holds onto some data across ghci reloads

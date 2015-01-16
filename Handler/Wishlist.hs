@@ -1,10 +1,10 @@
 module Handler.Wishlist where
 
-import Import
+import           Import
 
-import Text.Julius          (rawJS, juliusFile)
+import           Text.Julius (juliusFile, rawJS)
 
-import Types                (Priority(Medium))
+import           Types       (Priority (Medium))
 
 
 -- | Show the WishlistItems & a form to add Books.
