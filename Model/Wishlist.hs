@@ -1,14 +1,15 @@
 module Model.Wishlist where
 
 import ClassyPrelude.Yesod
-import Data.List             (nub)
-import qualified Data.Text as T
-import Foundation
-import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3,
-                              bfs, withPlaceholder)
+import Data.List                (nub)
+import Yesod.Form.Bootstrap3    (BootstrapFormLayout(..), renderBootstrap3,
+                                 bfs, withPlaceholder)
 
+import Foundation
 import Model
-import Types                 (Priority)
+import Util.Fields              (isbnField)
+import Types                    (Priority)
+
 
 -- Retrieve the BookIds & Books of a Wishlist.
 getBooksInWishlist :: WishlistId -> Handler [(BookId, Book)]
@@ -35,19 +36,14 @@ getMostWantedBooks = runDB $ do
 
 -- | A Form for valdating the creation of new Wishlists.
 wishlistForm :: Form Wishlist
-wishlistForm = renderBootstrap3 BootstrapInlineForm $ Wishlist
+wishlistForm           = renderBootstrap3 BootstrapInlineForm $ Wishlist
     <$> areq textField nameSettings Nothing
     where nameSettings = withPlaceholder "Wishlist Name" $ bfs ("Name" :: Text)
 
 -- | A Form for validating creation of WishlistItems from only an ISBN &
 -- Priorty.
 wishlistItemForm :: Form (Text, Priority)
-wishlistItemForm = renderBootstrap3 BootstrapInlineForm $ (,)
+wishlistItemForm       = renderBootstrap3 BootstrapInlineForm $ (,)
     <$> areq isbnField isbnSettings Nothing
     <*> areq (selectField optionsEnum) (bfs ("Priority" :: Text)) Nothing
-    where isbnField    = check validateIsbn textField
-          isbnSettings = withPlaceholder "ISBN" $ bfs ("ISBN" :: Text)
-          validateIsbn i
-              | length i `elem` [10, 13, 14] = Right $ T.filter (/= '-') i
-              | otherwise                    = Left (isbnError :: Text)
-          isbnError    = "Incorrect ISBN Length"
+    where isbnSettings = withPlaceholder "ISBN" $ bfs ("ISBN" :: Text)

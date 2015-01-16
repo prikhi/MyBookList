@@ -31,13 +31,16 @@ library
                      Import.NoFoundation
                      Model
                      Model.Book
+                     Model.Library
                      Model.Wishlist
                      Settings
                      Settings.StaticFiles
                      Types
+                     Util.Fields
                      Util.Isbn
                      Handler.Common
                      Handler.Home
+                     Handler.LibraryItemAdd
                      Handler.Wishlist
                      Handler.WishlistDelete
                      Handler.WishlistItemDelete

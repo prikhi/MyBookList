@@ -17,6 +17,17 @@ Book
     UniqueIsbn isbn
     deriving Eq
 
+LibraryItem
+    book BookId
+    rating Double Maybe
+    inProgress Bool
+    hasFinished Bool
+    completionCount Int
+    addedOn Day
+    firstFinishedOn Day Maybe
+    lastFinishedOn Day Maybe
+    UniqueLibraryBook book
+
 Wishlist
     name Text
     UniqueWishlistName name

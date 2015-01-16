@@ -1,0 +1,7 @@
+<p>
+  Please correct the errors in the form below.
+
+<form action=@{LibraryItemAddR} method=post enctype=#{libraryEnctype} .form-inline>
+  <div .form-group>
+    ^{libraryWidget}
+  <button type=submit .btn .btn-primary>Add Book
