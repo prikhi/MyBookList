@@ -8,8 +8,10 @@
         <span .icon-bar>
         <span .icon-bar>
         <span .icon-bar>
-      <a href="/" .navbar-brand>MyBookList
+      <a href=@{HomeR} .navbar-brand>MyBookList
     <div #top-navbar-collapse-1 .collapse .navbar-collapse>
       <ul .nav .navbar-nav>
         <li>
           <a href=@{HomeR}>Home
+        <li>
+          <a href=@{LibraryR}>Library

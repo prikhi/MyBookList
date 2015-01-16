@@ -38,12 +38,16 @@ library
                      Types
                      Util.Fields
                      Util.Isbn
+                     Util.Templates
                      Handler.Common
                      Handler.Home
+                     Handler.Library
                      Handler.LibraryItemAdd
+                     Handler.LibraryItemEdit
                      Handler.Wishlist
                      Handler.WishlistDelete
                      Handler.WishlistItemDelete
+
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

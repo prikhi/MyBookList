@@ -1,0 +1,9 @@
+/* Reduce the spacing around each Book's header */
+li.list-group-item h4
+  margin-top: 0
+  margin-bottom: 0px
+
+/* Space out the Book sections */
+li.list-group-item
+  margin-top: 7.5px
+  margin-bottom: 7.5px

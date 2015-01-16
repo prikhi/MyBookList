@@ -6,7 +6,9 @@
 
 / HomeR GET POST
 
+/library/ LibraryR GET
 /library/add/ LibraryItemAddR POST
+/library/edit/#LibraryItemId LibraryItemEditR GET POST
 
 /wishlist/view/#Text WishlistR GET POST
 /wishlist/delete/#WishlistId WishlistDeleteR GET

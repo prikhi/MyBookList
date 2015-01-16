@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module Handler.Home where
 
-import Import
+import           Import
 
 
 -- | Show a dashboard containing an overview of wishlists & the library.
@@ -32,5 +32,5 @@ getStandardHomeData :: Handler ([Entity Wishlist], [Book], Widget, Enctype)
 getStandardHomeData = do
     wishlists <- runDB $ selectList [] []
     wanted    <- getMostWantedBooks
-    (libraryWidget, libraryEnctype) <- generateFormPost libraryItemForm
+    (libraryWidget, libraryEnctype) <- generateFormPost libraryItemIsbnForm
     return (wishlists, wanted, libraryWidget, libraryEnctype)

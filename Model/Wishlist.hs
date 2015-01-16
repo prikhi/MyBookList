@@ -1,14 +1,14 @@
 module Model.Wishlist where
 
-import ClassyPrelude.Yesod
-import Data.List                (nub)
-import Yesod.Form.Bootstrap3    (BootstrapFormLayout(..), renderBootstrap3,
-                                 bfs, withPlaceholder)
+import           ClassyPrelude.Yesod
+import           Data.List             (nub)
+import           Yesod.Form.Bootstrap3 (BootstrapFormLayout (..),
+                                        renderBootstrap3, withPlaceholder)
 
-import Foundation
-import Model
-import Util.Fields              (isbnField)
-import Types                    (Priority)
+import           Foundation
+import           Model
+import           Types                 (Priority)
+import           Util.Fields           (bfsText, isbnField)
 
 
 -- Retrieve the BookIds & Books of a Wishlist.
@@ -38,12 +38,12 @@ getMostWantedBooks = runDB $ do
 wishlistForm :: Form Wishlist
 wishlistForm           = renderBootstrap3 BootstrapInlineForm $ Wishlist
     <$> areq textField nameSettings Nothing
-    where nameSettings = withPlaceholder "Wishlist Name" $ bfs ("Name" :: Text)
+    where nameSettings = withPlaceholder "Wishlist Name" $ bfsText "Name"
 
 -- | A Form for validating creation of WishlistItems from only an ISBN &
 -- Priorty.
 wishlistItemForm :: Form (Text, Priority)
 wishlistItemForm       = renderBootstrap3 BootstrapInlineForm $ (,)
     <$> areq isbnField isbnSettings Nothing
-    <*> areq (selectField optionsEnum) (bfs ("Priority" :: Text)) Nothing
-    where isbnSettings = withPlaceholder "ISBN" $ bfs ("ISBN" :: Text)
+    <*> areq (selectField optionsEnum) (bfsText "Priority") Nothing
+    where isbnSettings = withPlaceholder "ISBN" $ bfsText "ISBN"

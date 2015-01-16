@@ -1,0 +1,51 @@
+<div .row>
+  <!-- Add Book Form -->
+  <div .col-sm-8 .col-sm-offset-2>
+    <div .panel .panel-default>
+      <div .panel-body .text-center>
+        <form method=post action=@{LibraryItemAddR} enctype=#{libraryEnctype}
+              .form-inline>
+          <div .form-group>
+            ^{libraryWidget}
+          <button type=submit .btn .btn-primary>Add Book
+          <input type=submit name=edit value="Add &amp; Edit" .btn
+                  .btn-default>
+  <!-- Row Padding -->
+  <div .col-sm-2>
+  <div .col-sm-12>
+    <ul .list-group>
+      $forall (Entity itemId item, book) <- itemsAndBooks
+        <li .list-group-item .clearfix>
+          <h4 .clearfix>#{bookTitle book}
+            <!-- Buttons -->
+            <small .pull-right>
+              <a href=@{LibraryItemEditR itemId} .btn .btn-primary .btn-xs>
+                Edit
+          <!-- Labels -->
+          <span>
+            $if libraryItemInProgress item
+              <span .label .label-info>Reading
+            $elseif not (libraryItemHasFinished item)
+              <span .label .label-default>#{getFinishedText item}
+            $if libraryItemHasFinished item
+              <span .label .label-success>#{getFinishedText item}
+          <!-- Added/Finished Dates -->
+          <div .pull-right .text-right>
+            <small>
+              <em>
+                Added on #{formatDay $ libraryItemAddedOn item}
+                $maybe firstFinished <- libraryItemFirstFinishedOn item
+                  <br>
+                  First finished on #{formatDay firstFinished}
+                  $maybe lastFinished <- libraryItemLastFinishedOn item
+                    $if not (lastFinished == firstFinished)
+                      <br>
+                      Last finished on #{formatDay lastFinished}
+          <!-- Rating -->
+          <p>
+            <small>
+              <em>
+                $maybe rating <- libraryItemRating item
+                  #{rating}/5.0 Stars
+                $nothing
+                  Unrated

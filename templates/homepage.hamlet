@@ -3,6 +3,7 @@
     <h2>Library
     <div .well>
       <div .row>
+        <!-- Add -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
@@ -13,25 +14,39 @@
                 <div .form-group>
                   ^{libraryWidget}
                 <button type=submit .btn .btn-primary>Add Book
+                <input type=submit name=edit value="Add &amp; Edit" .btn
+                       .btn-default>
+        <!-- In Progress -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
               <h3 .panel-title>In Progress
             <div .panel-body>
+        <!-- Just Finished -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
               <h3 .panel-title>Just Finished
             <div .panel-body>
+        <!-- Newly Added -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
               <h3 .panel-title>Newly Added
             <div .panel-body>
+        <!-- View All Button -->
+        <div .col-sm-12>
+          <div .panel .panel-default>
+            <div .panel-body .text-center>
+              <a href=@{LibraryR} .btn .btn-primary>
+                View All
+                <span .glyphicon .glyphicon-forward>
+  <!-- Wishlists -->
   <div .col-sm-6>
     <h2>Wishlists
     <div .well>
       <div .row>
+        <!-- Create -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
@@ -42,6 +57,7 @@
                 <div .form-group>
                   ^{wishlistWidget}
                 <button type=submit .btn .btn-primary>Add Wishlist
+        <!-- Most Wanted -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
@@ -54,6 +70,7 @@
                   $forall book <- wanted
                     <li .list-group-item .text-center>
                       #{bookTitle book}
+        <!-- Browse -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
