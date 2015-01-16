@@ -1,2 +1,6 @@
 h1, h2, h3
   text-align: center
+
+/* Remove the double margin between the Page Header hr & h2s */
+h2
+  margin-top: 0
