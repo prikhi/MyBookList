@@ -1,18 +1,22 @@
 # MyBookList
 
-MyBookList is a web application written in Haskell that allows you to track
-your book library and wishlists.
+MyBookList is a web application that allows you to track your book library and
+wishlists.
 
 This project is in early-alpha: currently only a basic library & wishlists are
-implemented.
+implemented. Currently you can do things like:
+* Add a book to your library, view a couple stats about your library books.
+* Start/finish reading a library book.
+* Create wishlists and add books to them(along with a priority).
 
 
 ## Motivation
 
-MyBookList was built as an improvement over Amazon's wishlists.
+MyBookList was built as an improvement over Amazon's wishlists & a way to
+manage and track your progress through your library.
 
 Some improved functionality we would like to incorporate:
-* User library for managing owned books.
+* Pull new/used prices for books in wishlists.
 * Sort wishlist books by either used or new price.
 * Notifications for low prices on watched books.
 * Book clubs with discussions.
@@ -42,6 +46,7 @@ Run development server:
     yesod devel
 
 You should now be able to visit your local MyBookList at http://localhost:3000.
+
 
 ## Contributing
 
