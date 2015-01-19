@@ -22,18 +22,39 @@
             <div .panel-heading>
               <h3 .panel-title>In Progress
             <div .panel-body>
+              $if null inProgress
+                <p>You're not reading any books at the moment.
+              $else
+                <ul .list-group .text-center>
+                  $forall book <- inProgress
+                    <li .list-group-item>
+                      #{bookTitle book}
         <!-- Just Finished -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
               <h3 .panel-title>Just Finished
             <div .panel-body>
+              $if null recentlyFinished
+                <p>You haven't finished any books yet.
+              $else
+                <ul .list-group .text-center>
+                  $forall book <- recentlyFinished
+                    <li .list-group-item>
+                      #{bookTitle book}
         <!-- Newly Added -->
         <div .col-sm-12>
           <div .panel .panel-default>
             <div .panel-heading>
               <h3 .panel-title>Newly Added
             <div .panel-body>
+              $if null newlyAdded
+                <p>You haven't added any books to your Library yet.
+              $else
+                <ul .list-group .text-center>
+                  $forall book <- newlyAdded
+                    <li .list-group-item>
+                      #{bookTitle book}
         <!-- View All Button -->
         <div .col-sm-12>
           <div .panel .panel-default>
