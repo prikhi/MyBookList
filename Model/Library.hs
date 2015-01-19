@@ -28,6 +28,23 @@ createLibraryItemFromBook bookId = do
         , libraryItemLastFinishedOn  = Nothing
         }
 
+-- | Toggle the inProgress status of a 'LibraryItem'. If finishing a book,
+-- the last (& possibly first) finished date is set to the current day, and
+-- the completionCount is increased.
+toggleInProgressStatus :: Entity LibraryItem -> Handler ()
+toggleInProgressStatus (Entity itemId item)
+    | libraryItemInProgress item = do
+        currentDay <- liftIO $ utctDay <$> getCurrentTime
+        let updates = [ LibraryItemHasFinished      =. True
+                      , LibraryItemCompletionCount +=. 1
+                      , LibraryItemInProgress       =. False
+                      , LibraryItemLastFinishedOn   =. Just currentDay ] ++
+                      [ LibraryItemFirstFinishedOn  =. Just currentDay
+                            | isNothing $ libraryItemFirstFinishedOn item ]
+        runDB $ update itemId updates
+    | otherwise                  = runDB $ update itemId
+                                         [ LibraryItemInProgress =. True ]
+
 -- | Display nicely formtted text for number of times finished. This uses
 -- Once and Twice, then switches to numbers.
 getFinishedText :: LibraryItem -> Text

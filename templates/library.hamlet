@@ -10,17 +10,25 @@
           <button type=submit .btn .btn-primary>Add Book
           <input type=submit name=edit value="Add &amp; Edit" .btn
                   .btn-default>
-  <!-- Row Padding -->
-  <div .col-sm-2>
+<div .row>
+  <!-- Library Books -->
   <div .col-sm-12>
     <ul .list-group>
-      $forall (Entity itemId item, book) <- itemsAndBooks
+      $forall (Entity itemId item, book) <- reverse itemsAndBooks
         <li .list-group-item .clearfix>
           <h4 .clearfix>#{bookTitle book}
             <!-- Buttons -->
             <small .pull-right>
-              <a href=@{LibraryItemEditR itemId} .btn .btn-primary .btn-xs>
+              <a href=@{LibraryItemEditR itemId} .btn .btn-xs .btn-default>
                 Edit
+              $if libraryItemInProgress item
+                <a href=@{LibraryItemToggleStatusR itemId} .btn .btn-xs
+                   .btn-success>
+                  Finish Reading
+              $else
+                <a href=@{LibraryItemToggleStatusR itemId} .btn .btn-xs
+                   .btn-primary>
+                  Start Reading
           <!-- Labels -->
           <span>
             $if libraryItemInProgress item

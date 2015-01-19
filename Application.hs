@@ -29,6 +29,7 @@ import Handler.Home
 import Handler.Library
 import Handler.LibraryItemAdd
 import Handler.LibraryItemEdit
+import Handler.LibraryItemToggleStatus
 
 import Handler.Wishlist
 import Handler.WishlistDelete

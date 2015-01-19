@@ -44,6 +44,7 @@ library
                      Handler.Library
                      Handler.LibraryItemAdd
                      Handler.LibraryItemEdit
+                     Handler.LibraryItemToggleStatus
                      Handler.Wishlist
                      Handler.WishlistDelete
                      Handler.WishlistItemDelete

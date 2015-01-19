@@ -9,6 +9,7 @@
 /library/ LibraryR GET
 /library/add/ LibraryItemAddR POST
 /library/edit/#LibraryItemId LibraryItemEditR GET POST
+/library/toggle/#LibraryItemId LibraryItemToggleStatusR GET
 
 /wishlist/view/#Text WishlistR GET POST
 /wishlist/delete/#WishlistId WishlistDeleteR GET
