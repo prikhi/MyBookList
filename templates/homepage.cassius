@@ -1,6 +1,15 @@
+/* Center all the headings! */
 h1, h2, h3
   text-align: center
 
 /* Remove the double margin between the Page Header hr & h2s */
 h2
   margin-top: 0
+
+/* Remove extra space at bottom of list-group panels */
+div.panel ul.list-group
+  margin-bottom: 0
+
+/* Remove the extra space at the bottom of the panel wells */
+div#main div.well
+  padding-bottom: 0
