@@ -23,7 +23,7 @@ postHomeR = do
     case result of
          FormSuccess wishlist -> runDB (insert wishlist) >>
                                  setMessage "Successfully added Wishlist" >>
-                                 redirect HomeR
+                                 redirect (WishlistR $ wishlistName wishlist)
          _                    -> setMessage "Encountered an error while creating Wishlist"
     defaultLayout $ do
         setTitle "Welcome To MyBookList!"
