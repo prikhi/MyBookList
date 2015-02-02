@@ -14,3 +14,4 @@
 /wishlist/view/#Text WishlistR GET POST
 /wishlist/delete/#WishlistId WishlistDeleteR GET
 /wishlist/delete/#WishlistId/#BookId WishlistItemDeleteR GET
+/wishlist/move/#Text/#WishlistItemId WishlistItemMoveR GET

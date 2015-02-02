@@ -34,6 +34,7 @@ import Handler.LibraryItemToggleStatus
 import Handler.Wishlist
 import Handler.WishlistDelete
 import Handler.WishlistItemDelete
+import Handler.WishlistItemMove
 
 
 -- This line actually creates our YesodDispatch instance. It is the second half

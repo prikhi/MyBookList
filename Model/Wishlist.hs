@@ -11,17 +11,15 @@ import           Types                 (Priority)
 import           Util.Fields           (bfsText, isbnField)
 
 
--- Retrieve the BookIds & Books of a Wishlist.
-getBooksInWishlist :: WishlistId -> Handler [(BookId, Book)]
+-- Retrieve the Books & WishlistItems of a Wishlist.
+getBooksInWishlist :: WishlistId -> Handler [(Entity Book, Entity WishlistItem)]
 getBooksInWishlist wishlistId = do
     items  <- runDB $ selectList
               [WishlistItemWishlist ==. wishlistId] []
-    mBooks <- liftM sequence $ mapM (\(Entity _ i) -> do
-                   let bookId = wishlistItemBook i
-                   book <- runDB $ getJust bookId
-                   return $ Just (bookId, book)
-              ) items
-    return $ fromMaybe [] mBooks
+    mapM (\i@(Entity _ item) -> do
+            book <- runDB $ getJust $ wishlistItemBook item
+            return (Entity (wishlistItemBook item) book, i)
+        ) items
 
 -- Return the 5 highest priority Books in all Wishlists.
 getMostWantedBooks :: Handler [Book]

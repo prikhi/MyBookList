@@ -48,6 +48,7 @@ library
                      Handler.Wishlist
                      Handler.WishlistDelete
                      Handler.WishlistItemDelete
+                     Handler.WishlistItemMove
 
 
     if flag(dev) || flag(library-only)

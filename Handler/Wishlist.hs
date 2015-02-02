@@ -10,8 +10,7 @@ import           Types       (Priority (Medium))
 -- | Show the WishlistItems & a form to add Books.
 getWishlistR :: Text -> Handler Html
 getWishlistR name = do
-    Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
-    books                      <- getBooksInWishlist wishlistId
+    (wishlistId, wishlist, booksAndItems, otherLists) <- getStandardWishlistData name
     (addBookWidget, addBookEnctype) <- generateFormPost wishlistItemForm
     defaultLayout $ do
         setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
@@ -21,8 +20,7 @@ getWishlistR name = do
 -- | Process the addition of new Books to the Wishlist.
 postWishlistR :: Text -> Handler Html
 postWishlistR name = do
-    Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
-    books                      <- getBooksInWishlist wishlistId
+    (wishlistId, wishlist, booksAndItems, otherLists) <- getStandardWishlistData name
     ((result, addBookWidget), addBookEnctype)   <- runFormPost wishlistItemForm
     case result of
         FormSuccess formInstance -> do
@@ -38,3 +36,15 @@ postWishlistR name = do
         _                -> defaultLayout $ do
             setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
             $(widgetFile "wishlist")
+
+
+-- | Retrieve variables used in both GET & POST requests
+getStandardWishlistData :: Text
+                        -> Handler (Key Wishlist, Wishlist,
+                                    [(Entity Book, Entity WishlistItem)],
+                                    [Entity Wishlist])
+getStandardWishlistData name = do
+    Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
+    booksAndItems              <- getBooksInWishlist wishlistId
+    otherLists                 <- runDB $ selectList [WishlistName !=. name] []
+    return (wishlistId, wishlist, booksAndItems, otherLists)

@@ -1,7 +1,7 @@
 module Handler.LibraryItemAdd where
 
-import           Import
 import           Data.Maybe (fromJust)
+import           Import
 
 
 -- | Process the addition of new BOoks to the Library.

@@ -18,15 +18,29 @@
     <hr #form-panel-rule>
   <!-- Book List -->
   <div .col-sm-12>
-    $if null books
+    $if null booksAndItems
       <p>You haven't added anything to this wishlist yet.
     $else
       <ul .list-group>
-        $forall (bookId, book) <- books
-          <li .list-group-item .text-center>
+        $forall (Entity bookId book, Entity itemId _) <- booksAndItems
+          <li .list-group-item .text-center .clearfix>
             #{bookTitle book}
-            <small>[
-              <a href=@{WishlistItemDeleteR wishlistId bookId}>Delete</a>]
+            <div .pull-right>
+              <!-- Move Button Group -->
+              <div .btn-group>
+                <button type=button data-toggle=dropdown aria-expanded=false
+                        .btn .btn-default .btn-xs .dropdown-toggle>
+                  Move <span class="caret"></span>
+                <ul role=menu .dropdown-menu>
+                  $forall Entity _ otherList <- otherLists
+                    <li>
+                      <a href=@{WishlistItemMoveR (wishlistName otherList) itemId}>
+                        #{wishlistName otherList}
+              <!-- Delete Button -->
+              <a href=@{WishlistItemDeleteR wishlistId bookId} .btn .btn-xs
+                  .btn-danger>
+                Remove
+
 
 <!-- Delete Modal -->
 <div tabindex=-1 role=dialog aria-labelledby=delete-modal-label
