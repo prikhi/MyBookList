@@ -2,8 +2,9 @@
 module Model.Book where
 
 import           ClassyPrelude.Yesod
-import           Foundation
+import qualified Data.Text           as T (filter)
 
+import           Foundation
 import           Model
 import           Util.Isbn           (ISBNdbBookMetadata (..),
                                       getMetadataFromIsbn)
@@ -13,13 +14,16 @@ import           Util.Isbn           (ISBNdbBookMetadata (..),
 -- database. Returns Nothing on failure.
 createBookFromIsbn :: Text -> Handler (Maybe BookId)
 createBookFromIsbn i = do
-    mMetadata <- getMetadataFromIsbn i
-    case mMetadata of
-        Just bookMeta -> do
-            mBook  <- runDB $ getBy . UniqueIsbn $ isbn bookMeta
+    let cleanIsbn    = T.filter isAlphaNum i
+    mExistingBook   <- runDB . getBy $ UniqueIsbn cleanIsbn
+    case mExistingBook of
+        Just (Entity b _) -> return $ Just b
+        Nothing           -> getMetadataFromIsbn cleanIsbn >>=
+                             maybe (return Nothing) createIfNoIsbn
+    where isAlphaNum = flip elem $ ['a'..'z'] ++ ['A'..'Z'] ++ ['0'..'9']
+          createIfNoIsbn metadata = do
+            mBook   <- runDB $ getBy . UniqueIsbn $ isbn metadata
             case mBook of
                     Just (Entity b _)  -> return $ Just b
-                    Nothing -> do x <- runDB $ insert $ Book (isbn bookMeta)
-                                        (title bookMeta) (author bookMeta)
-                                  return $ Just x
-        Nothing       -> return Nothing
+                    Nothing            -> Just <$> runDB (insert $
+                        Book (isbn metadata) (title metadata) (author metadata))
