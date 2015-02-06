@@ -24,16 +24,20 @@ postWishlistR name = do
     ((result, addBookWidget), addBookEnctype)   <- runFormPost wishlistItemForm
     case result of
         FormSuccess formInstance -> do
-            bookid <- fromMaybe (error "create failed") <$>
-                      createBookFromIsbn (fst formInstance)
-            mItem  <- runDB $ getBy $ WishlistBook wishlistId bookid
+            bookid       <- fromMaybe (error "create failed") <$>
+                            createBookFromIsbn (fst formInstance)
+            mLibraryItem <- runDB $ getBy $ UniqueLibraryBook bookid
+            when (isJust mLibraryItem) $ do
+                setMessage "That book is already in your Library"
+                redirect $ WishlistR name
+            mItem        <- runDB $ getBy $ WishlistBook wishlistId bookid
             case mItem of
                  Just _  -> setMessage "That Book is already in your Wishlist"
                  Nothing -> runDB (insert $ WishlistItem bookid wishlistId
-                                            $ snd formInstance)
+                                          $ snd formInstance)
                          >> setMessage "Added Book to your Wishlist"
             redirect $ WishlistR name
-        _                -> defaultLayout $ do
+        _                        -> defaultLayout $ do
             setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
             $(widgetFile "wishlist/wishlist")
 
