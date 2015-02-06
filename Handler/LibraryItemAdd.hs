@@ -18,6 +18,7 @@ postLibraryItemAddR = do
                  Just _   -> setMessage "That Book is already in your Library"
                           >> return Nothing
                  Nothing  -> setMessage "Added Book to your Library" >>
+                             runDB (deleteWhere [WishlistItemBook ==. bookId]) >>
                              Just <$> createLibraryItemFromBook bookId
             if isJust continueEditing && isJust mItemId
                 then redirect (LibraryItemEditR $ fromJust mItemId)
