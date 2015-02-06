@@ -22,11 +22,25 @@
       <p>You haven't added anything to this wishlist yet.
     $else
       <ul .list-group>
-        $forall (Entity bookId book, Entity itemId _) <- booksAndItems
+        $forall (Entity bookId book, Entity itemId item) <- booksAndItems
           <li .list-group-item .text-center .clearfix>
             #{bookTitle book}
             <div .pull-right>
-              <!-- Move Button Group -->
+              <!-- Priority - Split Button Dropdown -->
+              <div .btn-group>
+                $with priority <- wishlistItemPriority item
+                  $case priority
+                    $of Highest
+                      ^{priorityDropdownWidget itemId priority "btn-primary"}
+                    $of High
+                      ^{priorityDropdownWidget itemId priority "btn-success"}
+                    $of Medium
+                      ^{priorityDropdownWidget itemId priority "btn-warning"}
+                    $of Low
+                      ^{priorityDropdownWidget itemId priority "btn-info"}
+                    $of Lowest
+                      ^{priorityDropdownWidget itemId priority "btn-default"}
+              <!-- Move - Single Button Dropdown -->
               <div .btn-group>
                 <button type=button data-toggle=dropdown aria-expanded=false
                         .btn .btn-default .btn-xs .dropdown-toggle>

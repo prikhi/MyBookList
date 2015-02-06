@@ -4,7 +4,7 @@ import           Import
 
 import           Text.Julius (juliusFile, rawJS)
 
-import           Types       (Priority (Medium))
+import           Types       (Priority (..))
 
 
 -- | Show the WishlistItems & a form to add Books.
@@ -48,3 +48,11 @@ getStandardWishlistData name = do
     booksAndItems              <- getBooksInWishlist wishlistId
     otherLists                 <- runDB $ selectList [WishlistName !=. name] []
     return (wishlistId, wishlist, booksAndItems, otherLists)
+
+
+-- | Render a dropdown button group for modifying a 'WishlistItemPriority'.
+priorityDropdownWidget :: WishlistItemId -> Priority -> Text -> Widget
+priorityDropdownWidget itemId priority btnColorClass =
+    let otherPriorities = filter (/= priority)
+                                 [Highest, High, Medium, Low, Lowest]
+    in  $(widgetFile "wishlist/priorityDropdown")

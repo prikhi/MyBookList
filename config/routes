@@ -15,3 +15,4 @@
 /wishlist/delete/#WishlistId WishlistDeleteR GET
 /wishlist/delete/#WishlistId/#BookId WishlistItemDeleteR GET
 /wishlist/move/#Text/#WishlistItemId WishlistItemMoveR GET
+/wishlist/priority/#WishlistItemId/#Priority WishlistItemPriorityR GET

@@ -1,0 +1,11 @@
+<button class="#{btnColorClass}" .btn .btn-xs .active .current-priority>
+  #{show priority}
+<button type=bytton data-toggle=dropdown aria-expanded=false
+        class="#{btnColorClass}" .btn .btn-xs .dropdown-toggle>
+  <span .caret>
+  <span .sr-only>Toggle Dropdown
+<ul role=menu .dropdown-menu>
+  $forall otherPriority <- otherPriorities
+    <li>
+      <a href=@{WishlistItemPriorityR itemId otherPriority}>
+        #{show otherPriority}

@@ -1,0 +1,2 @@
+button.current-priority:hover
+  cursor: default
