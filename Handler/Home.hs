@@ -21,13 +21,16 @@ postHomeR = do
       libraryWidget, libraryEnctype)            <- getStandardHomeData
     ((result, wishlistWidget), wishlistEnctype) <- runFormPost wishlistForm
     case result of
-         FormSuccess wishlist -> runDB (insert wishlist) >>
-                                 setMessage "Successfully added Wishlist" >>
-                                 redirect (WishlistR $ wishlistName wishlist)
-         _                    -> setMessage "Encountered an error while creating Wishlist"
-    defaultLayout $ do
-        setTitle "Welcome To MyBookList!"
-        $(widgetFile "homepage")
+         FormSuccess wishlist ->
+            runDB (getBy $ UniqueWishlistName $ wishlistName wishlist) >>=
+            maybe (runDB (insert wishlist) >>
+                   setMessage "Successfully added Wishlist")
+                  (const $ setMessage "This Wishlist already exists") >>
+            redirect (WishlistR $ wishlistName wishlist)
+         _                    ->
+            setMessage "Encountered an error while creating Wishlist" >>
+            defaultLayout (setTitle "Welcome To MyBookList!" >>
+                           $(widgetFile "homepage"))
 
 
 -- | Retrieve standard variables used in both GET & POST requests.
