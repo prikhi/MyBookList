@@ -18,40 +18,40 @@
                        .btn-default>
         <!-- In Progress -->
         <div .col-sm-12>
-          <div .panel .panel-info>
+          <div .panel .panel-info .text-center>
             <div .panel-heading>
               <h3 .panel-title>In Progress
             <div .panel-body>
               $if null inProgress
                 <p>You're not reading any books at the moment.
               $else
-                <ul .list-group .text-center>
+                <ul .list-group>
                   $forall book <- inProgress
                     <li .list-group-item>
                       #{bookTitle book}
         <!-- Just Finished -->
         <div .col-sm-12>
-          <div .panel .panel-info>
+          <div .panel .panel-info .text-center>
             <div .panel-heading>
               <h3 .panel-title>Just Finished
             <div .panel-body>
               $if null recentlyFinished
                 <p>You haven't finished any books yet.
               $else
-                <ul .list-group .text-center>
+                <ul .list-group>
                   $forall book <- recentlyFinished
                     <li .list-group-item>
                       #{bookTitle book}
         <!-- Newly Added -->
         <div .col-sm-12>
-          <div .panel .panel-info>
+          <div .panel .panel-info .text-center>
             <div .panel-heading>
               <h3 .panel-title>Newly Added
             <div .panel-body>
               $if null newlyAdded
                 <p>You haven't added any books to your Library yet.
               $else
-                <ul .list-group .text-center>
+                <ul .list-group>
                   $forall book <- newlyAdded
                     <li .list-group-item>
                       #{bookTitle book}
@@ -69,10 +69,10 @@
       <div .row>
         <!-- Create -->
         <div .col-sm-12>
-          <div .panel .panel-info>
+          <div .panel .panel-info .text-center>
             <div .panel-heading>
               <h3 .panel-title>Create
-            <div .panel-body .text-center>
+            <div .panel-body>
               <form method=post action=@{HomeR} enctype=#{wishlistEnctype}
                     .form-inline>
                 <div .form-group>
@@ -80,7 +80,7 @@
                 <button type=submit .btn .btn-primary>Add Wishlist
         <!-- Most Wanted -->
         <div .col-sm-12>
-          <div .panel .panel-info>
+          <div .panel .panel-info .text-center>
             <div .panel-heading>
               <h3 .panel-title>Most Wanted
             <div .panel-body>
@@ -89,11 +89,11 @@
               $else
                 <ul .list-group>
                   $forall book <- wanted
-                    <li .list-group-item .text-center>
+                    <li .list-group-item>
                       #{bookTitle book}
         <!-- Browse -->
         <div .col-sm-12>
-          <div .panel .panel-info>
+          <div .panel .panel-info .text-center>
             <div .panel-heading>
               <h3 .panel-title>Browse
             <div .panel-body>
@@ -102,6 +102,6 @@
               $else
                 <ul .list-group>
                   $forall Entity _ wishlist <- wishlists
-                    <li .list-group-item .text-center>
+                    <li .list-group-item>
                       <a href=@{WishlistR $ wishlistName wishlist}>
                         #{wishlistName wishlist}
