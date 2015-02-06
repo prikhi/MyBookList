@@ -11,7 +11,7 @@ getLibraryItemEditR libraryItemId = do
     (widget, enctype) <- generateFormPost $ libraryItemEditForm item
     defaultLayout $ do
         setTitle $ "Editing " `mappend` toHtml (bookTitle book)
-        $(widgetFile "libraryEdit")
+        $(widgetFile "library/libraryEdit")
 
 -- | Process the LibraryItem Editing Form.
 postLibraryItemEditR :: LibraryItemId -> Handler Html
@@ -25,4 +25,4 @@ postLibraryItemEditR libraryItemId = do
                                 >> redirect LibraryR
         _                       -> defaultLayout $ do
             setTitle $ "Editing " `mappend` toHtml (bookTitle book)
-            $(widgetFile "libraryEdit")
+            $(widgetFile "library/libraryEdit")

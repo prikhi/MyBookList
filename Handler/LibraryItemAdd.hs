@@ -24,4 +24,4 @@ postLibraryItemAddR = do
                 else redirect LibraryR
          _                -> defaultLayout $ do
             setTitle "An Error Occured While Adding to the Library"
-            $(widgetFile "libraryItemAddError")
+            $(widgetFile "library/libraryItemAddError")

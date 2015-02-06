@@ -12,4 +12,4 @@ getLibraryR = do
     (libraryWidget, libraryEnctype) <- generateFormPost libraryItemIsbnForm
     defaultLayout $ do
         setTitle "Library"
-        $(widgetFile "library")
+        $(widgetFile "library/library")

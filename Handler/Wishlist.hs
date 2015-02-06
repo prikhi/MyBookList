@@ -14,8 +14,8 @@ getWishlistR name = do
     (addBookWidget, addBookEnctype) <- generateFormPost wishlistItemForm
     defaultLayout $ do
         setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
-        toWidget $(juliusFile "templates/wishlistGet.julius")
-        $(widgetFile "wishlist")
+        toWidget $(juliusFile "templates/wishlist/wishlistGet.julius")
+        $(widgetFile "wishlist/wishlist")
 
 -- | Process the addition of new Books to the Wishlist.
 postWishlistR :: Text -> Handler Html
@@ -35,7 +35,7 @@ postWishlistR name = do
             redirect $ WishlistR name
         _                -> defaultLayout $ do
             setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
-            $(widgetFile "wishlist")
+            $(widgetFile "wishlist/wishlist")
 
 
 -- | Retrieve variables used in both GET & POST requests
