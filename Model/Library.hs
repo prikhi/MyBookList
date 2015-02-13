@@ -96,7 +96,7 @@ libraryItemEditForm item = renderBootstrap3 BootstrapBasicForm $
     LibraryItem bookId
     <$> aopt doubleField (bfsText  "Rating") (Just $ libraryItemRating item)
     <*> areq checkBoxField (bfsText "Currently Reading?") (Just $ libraryItemInProgress item)
-    <*> areq checkBoxField (bfsText "Finished Already?") (Just $ libraryItemHasFinished item)
+    <*> pure (libraryItemHasFinished item)
     <*> areq intField (bfsText "Times Finished") (Just $ libraryItemCompletionCount item)
     <*> areq dayField (bfsText "Added On") (Just $ libraryItemAddedOn item)
     <*> aopt dayField (bfsText "First Finished") (Just $ libraryItemFirstFinishedOn item)

@@ -20,9 +20,12 @@ postLibraryItemEditR libraryItemId = do
     book              <- runDB . getJust $ libraryItemBook item
     ((result, widget), enctype) <- runFormPost $ libraryItemEditForm item
     case result of
-        FormSuccess updatedItem -> runDB (replace libraryItemId updatedItem)
+        FormSuccess updatedItem -> runDB (replace libraryItemId $ setHasFinished updatedItem)
                                 >> setMessage "Successfully updated your Library Book"
                                 >> redirect LibraryR
         _                       -> defaultLayout $ do
             setTitle $ "Editing " `mappend` toHtml (bookTitle book)
             $(widgetFile "library/libraryEdit")
+    where setHasFinished i
+            | libraryItemCompletionCount i == 0 = i { libraryItemHasFinished = False }
+            | otherwise = i { libraryItemHasFinished = True }
