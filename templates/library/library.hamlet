@@ -19,8 +19,7 @@
           <h4 .clearfix>#{bookTitle book}
             <!-- Buttons -->
             <small .pull-right>
-              <a href=@{LibraryItemEditR itemId} .btn .btn-xs .btn-default>
-                Edit
+              <!-- Start / Finish Reading -->
               $if libraryItemInProgress item
                 <a href=@{LibraryItemToggleStatusR itemId} .btn .btn-xs
                    .btn-success>
@@ -29,6 +28,12 @@
                 <a href=@{LibraryItemToggleStatusR itemId} .btn .btn-xs
                    .btn-primary>
                   Start Reading
+              <!-- Edit -->
+              <a href=@{LibraryItemEditR itemId} .btn .btn-xs .btn-default>
+                Edit
+              <!-- Remove -->
+              <a href=@{LibraryItemDeleteR itemId} .btn .btn-xs .btn-danger>
+                Remove
           <!-- Labels -->
           <span>
             $if libraryItemInProgress item

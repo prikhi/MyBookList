@@ -8,6 +8,7 @@
 
 /library/ LibraryR GET
 /library/add/ LibraryItemAddR POST
+/library/delete/#LibraryItemId LibraryItemDeleteR GET
 /library/edit/#LibraryItemId LibraryItemEditR GET POST
 /library/toggle/#LibraryItemId LibraryItemToggleStatusR GET
 
