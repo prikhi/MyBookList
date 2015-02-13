@@ -1,4 +1,5 @@
-<form method=post action=@{LibraryItemEditR libraryItemId} enctype=#{enctype}
-      .form-horizontal>
-  ^{widget}
-  <button type=submit .btn .btn-primary>Save Changes
+<div .col-sm-12>
+  <form method=post action=@{LibraryItemEditR libraryItemId} enctype=#{enctype}
+        .form-horizontal>
+    ^{widget}
+    <button type=submit .btn .btn-primary>Save Changes
