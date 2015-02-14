@@ -1,0 +1,8 @@
+<div .btn-group>
+  <button type=button data-toggle=dropdown aria-expanded=false .btn
+          .btn-default .dropdown-toggle>
+    Sort By <span class="caret"></span>
+  <ul role=menu .dropdown-menu>
+    $forall (val, name, _) <- librarySortingOptions
+      <li>
+        <a href="?sort=#{val}">#{name}

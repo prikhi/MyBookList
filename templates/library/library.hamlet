@@ -1,6 +1,6 @@
 <div .row>
   <!-- Add Book Form -->
-  <div .col-sm-8 .col-sm-offset-2>
+  <div .col-sm-9 .col-md-offset-2 .col-md-6>
     <div .panel .panel-default>
       <div .panel-body .text-center>
         <form method=post action=@{LibraryItemAddR} enctype=#{libraryEnctype}
@@ -10,6 +10,12 @@
           <button type=submit .btn .btn-primary>Add Book
           <input type=submit name=edit value="Add &amp; Edit" .btn
                   .btn-default>
+  <!-- Button Panel -->
+  <div .col-sm-3 .col-md-2 .text-center>
+    <div .panel .panel-default>
+      <div .panel-body>
+        ^{librarySortWidget}
+
 <div .row>
   <!-- Library Books -->
   <div .col-sm-12>
