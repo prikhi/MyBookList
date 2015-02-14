@@ -31,9 +31,10 @@
               <!-- Edit -->
               <a href=@{LibraryItemEditR itemId} .btn .btn-xs .btn-default>
                 Edit
-              <!-- Remove -->
-              <a href=@{LibraryItemDeleteR itemId} .btn .btn-xs .btn-danger>
-                Remove
+              <!-- Delete -->
+              <a href=@{LibraryItemDeleteR itemId} title="Remove Library Book"
+                 .btn .btn-xs .btn-danger>
+                  <span .glyphicon .glyphicon-remove>
           <!-- Labels -->
           <span>
             $if libraryItemInProgress item

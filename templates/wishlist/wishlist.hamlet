@@ -51,9 +51,9 @@
                       <a href=@{WishlistItemMoveR (wishlistName otherList) itemId}>
                         #{wishlistName otherList}
               <!-- Delete Button -->
-              <a href=@{WishlistItemDeleteR wishlistId bookId} .btn .btn-xs
-                  .btn-danger>
-                Remove
+              <a href=@{WishlistItemDeleteR wishlistId bookId}
+                 title="Remove Wishlist Book" .btn .btn-xs .btn-danger>
+                  <span .glyphicon .glyphicon-remove>
 
 
 <!-- Delete Modal -->
