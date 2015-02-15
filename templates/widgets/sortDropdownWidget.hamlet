@@ -3,6 +3,6 @@
           .btn-default .dropdown-toggle>
     Sort By <span class="caret"></span>
   <ul role=menu .dropdown-menu>
-    $forall (val, name, _) <- librarySortingOptions
+    $forall (val, name) <- dropdownOptions
       <li>
         <a href="?sort=#{val}">#{name}

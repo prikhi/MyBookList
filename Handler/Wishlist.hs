@@ -1,11 +1,14 @@
 module Handler.Wishlist where
 
+
+import           Text.Julius  (juliusFile, rawJS)
+
 import           Import
+import           Types        (Priority (..))
+import           Util.Widgets (getSortValue, sortWidget, sortListByOption)
 
-import           Text.Julius (juliusFile, rawJS)
-
-import           Types       (Priority (..))
-
+-- | A 'Book' 'Entity' & 'WishlistItem' 'Entity' packed into a Tuple.
+type WishlistItemAndBook = (Entity Book, Entity WishlistItem)
 
 -- | Show the WishlistItems & a form to add Books.
 getWishlistR :: Text -> Handler Html
@@ -45,13 +48,14 @@ postWishlistR name = do
 -- | Retrieve variables used in both GET & POST requests
 getStandardWishlistData :: Text
                         -> Handler (Key Wishlist, Wishlist,
-                                    [(Entity Book, Entity WishlistItem)],
-                                    [Entity Wishlist])
+                                    [WishlistItemAndBook], [Entity Wishlist])
 getStandardWishlistData name = do
-    Entity wishlistId wishlist <- runDB . getBy404 $ UniqueWishlistName name
-    booksAndItems              <- getBooksInWishlist wishlistId
-    otherLists                 <- runDB $ selectList [WishlistName !=. name] []
-    return (wishlistId, wishlist, booksAndItems, otherLists)
+    sortVal            <- getSortValue "priority"
+    Entity listId list <- runDB . getBy404 $ UniqueWishlistName name
+    booksAndItems      <- sortWishlist sortVal <$> getBooksInWishlist listId
+    otherLists         <- runDB $ selectList [WishlistName !=. name] []
+    return (listId, list, booksAndItems, otherLists)
+    where sortWishlist       = sortListByOption wishlistSortingOptions
 
 
 -- | Render a dropdown button group for modifying a 'WishlistItemPriority'.
@@ -60,3 +64,21 @@ priorityDropdownWidget itemId priority btnColorClass =
     let otherPriorities = filter (/= priority)
                                  [Highest, High, Medium, Low, Lowest]
     in  $(widgetFile "wishlist/priorityDropdown")
+
+
+-- | Display a Dropdown Button to Select a Wishlist Sorting Option.
+wishlistSortWidget :: Widget
+wishlistSortWidget = sortWidget wishlistSortingOptions
+
+
+-- | Return the GET Value, Name & Sorting Function for Library Sort Types.
+wishlistSortingOptions :: [(Text, Text,
+                            WishlistItemAndBook -> WishlistItemAndBook ->
+                            Ordering)]
+wishlistSortingOptions =
+    [ ("priority", "Priority", flipComparing $ wishlistItemPriority . getItem)
+    , ("name", "Name (A-Z)", comparing $ bookTitle . getBook)
+    , ("name-reverse", "Name (Z-A)", flipComparing $ bookTitle . getBook)
+    ]
+    where getBook (Entity _ b, _) = b
+          getItem (_, Entity _ i) = i

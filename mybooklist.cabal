@@ -36,9 +36,11 @@ library
                      Settings
                      Settings.StaticFiles
                      Types
+                     Util.Common
                      Util.Fields
                      Util.Isbn
                      Util.Templates
+                     Util.Widgets
                      Handler.Common
                      Handler.Home
                      Handler.Library

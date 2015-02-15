@@ -1,8 +1,7 @@
 module Handler.Library where
 
-import           Data.Maybe (fromJust)
-
 import           Import
+import           Util.Widgets (getSortValue, sortListByOption, sortWidget)
 
 
 -- | A 'LibraryItem' 'Entity' & 'Book' packed into a Tuple.
@@ -12,7 +11,7 @@ type LibraryItemAndBook = (Entity LibraryItem, Book)
 -- | Display all LibraryItems.
 getLibraryR :: Handler Html
 getLibraryR = do
-    sortVal <- fromMaybe "status" <$> runInputGet (iopt textField "sort")
+    sortVal <- getSortValue "status"
     items   <- runDB $ selectList [] []
     books   <- mapM (\(Entity _ i) -> runDB $ getJust $ libraryItemBook i) items
     let itemsAndBooks = sortLibrary sortVal $ zip items books
@@ -20,15 +19,8 @@ getLibraryR = do
     defaultLayout $ do
         setTitle "Library"
         $(widgetFile "library/library")
-
-
--- | Sort a Library's Items & Books.
-sortLibrary :: Text -> [LibraryItemAndBook] -> [LibraryItemAndBook]
-sortLibrary sortString = sortBy $ getThird sortResult
-    where sortResult   = fromJust $ find ((==) sortString . getFirst)
-                                    librarySortingOptions
-          getFirst (a, _, _) = a
-          getThird (_, _, c) = c
+    where sortLibrary       = sortListByOption librarySortingOptions
+          librarySortWidget = sortWidget librarySortingOptions
 
 
 -- | Return the GET Value, Name & Sorting Function for Library Sort Types.
@@ -50,9 +42,3 @@ librarySortingOptions =
                  in if result == EQ
                         then flipComparing libraryItemHasFinished item1 item2
                         else result
-          flipComparing f a b     = comparing f b a
-
-
--- | Display a Dropdown Button to Select a Sorting Type
-librarySortWidget :: Widget
-librarySortWidget = $(widgetFile "library/librarySortDropdown")
