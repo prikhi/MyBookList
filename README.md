@@ -3,11 +3,13 @@
 MyBookList is a web application that allows you to track your book library and
 wishlists.
 
-This project is in early-alpha: currently only a basic library & wishlists are
-implemented. Currently you can do things like:
-* Add a book to your library, view a couple stats about your library books.
-* Start/finish reading a library book.
-* Create wishlists and add books to them(along with a priority).
+This project is still in alpha development: new features are consistently being
+adding, the API & database schema is volatile, some bugs may exist & some
+expected functionality might be mising. Some things you may miss:
+* New & Used Prices for Wishlist Items
+* Moving wishlist items to the library
+* Statistics
+* User Accounts(only a single user per database)
 
 
 ## Motivation
@@ -39,7 +41,7 @@ Create a sandbox:
 
 Install dependencies:
 
-    cabal install --only-dependencies --max-backjumps=-1 -j 
+    cabal install --only-dependencies --max-backjumps=-1 -j
 
 Run development server:
 
