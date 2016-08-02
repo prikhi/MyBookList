@@ -12,6 +12,19 @@
     <div #top-navbar-collapse-1 .collapse .navbar-collapse>
       <ul .nav .navbar-nav>
         <li>
-          <a href=@{HomeR}>Home
-        <li>
-          <a href=@{LibraryR}>Library
+          <a href=@{DashboardR}>Dashboard
+        $maybe (Entity _ _, Entity _ profile)  <- mProfile
+          <li>
+            <a href=@{LibraryR $ userProfileSlug profile}>Library
+      <ul .nav .navbar-nav .navbar-right>
+        $maybe (Entity _ _, Entity _ profile)  <- mProfile
+          <li .dropdown>
+            <a data-toggle=dropdown aria-haspopup=true aria-expanded=false
+               #userLabel .dropdown-toggle>
+              Hello #{userProfileName profile} <span class="caret"></span>
+            <ul role=menu aria-labelledby=userLabel .dropdown-menu>
+              <li role=presentation>
+                <a role=menuitem tabindex=-1 href=@{AuthR LogoutR}>Logout
+        $nothing
+          <li>
+            <a href=@{AuthR LoginR}>Login

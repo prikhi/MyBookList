@@ -1,14 +1,15 @@
 module Foundation where
 
 import Import.NoFoundation
-import Database.Persist.Sql (ConnectionPool, runSqlPool)
-import Text.Hamlet          (hamletFile)
-import Text.Jasmine         (minifym)
-import Yesod.Auth.BrowserId (authBrowserId)
-import Yesod.Default.Util   (addStaticContentExternal)
-import Yesod.Core.Types     (Logger)
+import qualified Data.Text as T (pack)
+import Database.Persist.Sql     (ConnectionPool, runSqlPool, fromSqlKey)
+import Text.Hamlet              (hamletFile)
+import Text.Jasmine             (minifym)
+import Yesod.Auth.BrowserId     (authBrowserId)
+import Yesod.Default.Util       (addStaticContentExternal)
+import Yesod.Core.Types         (Logger)
 
-import Types                (Priority)
+import Types                    (Priority)
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -54,8 +55,10 @@ instance Yesod App where
         master <- getYesod
         mmsg <- getMessage
 
+
         -- Site-Wide Variables/Widgets
         theTitle <- pageTitle <$> widgetToPageContent widget
+        mProfile <- getProfile
         let navigationWidget = $(widgetFile "includes/navigation")
             messageWidget    = $(widgetFile "includes/messages")
             footerWidget     = $(widgetFile "includes/footer")
@@ -77,11 +80,13 @@ instance Yesod App where
     authRoute _ = Just $ AuthR LoginR
 
     -- Routes not requiring authentication.
-    isAuthorized (AuthR _) _ = return Authorized
-    isAuthorized FaviconR _ = return Authorized
-    isAuthorized RobotsR _ = return Authorized
+    isAuthorized (AuthR _) _  = return Authorized
+    isAuthorized FaviconR _   = return Authorized
+    isAuthorized RobotsR _    = return Authorized
+    isAuthorized DashboardR _ = maybe AuthenticationRequired (const Authorized)
+                            <$> maybeAuthId
     -- Default to Authorized for now.
-    isAuthorized _ _ = return Authorized
+    isAuthorized _ _          = return Authorized
 
     -- This function creates static content files in the static folder
     -- and names them based on a hash of their content. This allows
@@ -124,7 +129,7 @@ instance YesodAuth App where
     type AuthId App = UserId
 
     -- Where to send a user after successful login
-    loginDest _ = HomeR
+    loginDest _ = DashboardR
     -- Where to send a user after logout
     logoutDest _ = HomeR
     -- Override the above two destinations when a Referer: header is present
@@ -133,14 +138,17 @@ instance YesodAuth App where
     getAuthId creds = runDB $ do
         x <- getBy $ UniqueUser $ credsIdent creds
         case x of
-            Just (Entity uid _) -> return $ Just uid
-            Nothing -> Just <$> insert User
-                    { userIdent = credsIdent creds
-                    , userPassword = Nothing
-                    }
+            Just (Entity userId _) -> do
+                mProfile <- getBy $ UniqueProfile userId
+                _ <- when (isNothing mProfile) . void $ createDefaultProfile userId
+                return (Just userId)
+            Nothing -> do
+                userId <- insert User { userIdent = credsIdent creds }
+                _      <- createDefaultProfile userId
+                return $ Just userId
 
     -- You can add other plugins like BrowserID, email or OAuth here
-    authPlugins _ = [authBrowserId def]
+    authPlugins _ = [ authBrowserId def ]
 
     authHttpManager = getHttpManager
 
@@ -151,10 +159,30 @@ instance YesodAuthPersist App
 instance RenderMessage App FormMessage where
     renderMessage _ _ = defaultFormMessage
 
--- Note: Some functionality previously present in the scaffolding has been
--- moved to documentation in the Wiki. Following are some hopefully helpful
--- links:
---
--- https://github.com/yesodweb/yesod/wiki/Sending-email
--- https://github.com/yesodweb/yesod/wiki/Serve-static-files-from-a-separate-domain
--- https://github.com/yesodweb/yesod/wiki/i18n-messages-in-the-scaffolding
+
+-- | Retrieve a Potentially Logged-in User & Profile.
+getProfile :: HandlerT App IO (Maybe (Entity User, Entity UserProfile))
+getProfile   = do
+    mAuthId <- maybeAuthId
+    case mAuthId of
+         Nothing     -> return Nothing
+         Just userId -> do
+            user     <- runDB $ getJust userId
+            profile  <- runDB . getBy $ UniqueProfile userId
+            case profile of
+                Nothing  -> Just . (Entity userId user,) <$>
+                            runDB (createDefaultProfile userId)
+                Just p   -> return $ Just (Entity userId user, p)
+
+
+-- | Create a Default Profile & Library for a User.
+createDefaultProfile :: Key User -> YesodDB App (Entity UserProfile)
+createDefaultProfile userId   = do
+    profileId <- insert profile
+    _         <- insert $ Library userId
+    return $ Entity profileId profile
+    where profile             = UserProfile
+            { userProfileUser = userId
+            , userProfileName = "user" ++ T.pack (show $ fromSqlKey userId)
+            , userProfileSlug = "user" ++ T.pack (show $ fromSqlKey userId)
+            }

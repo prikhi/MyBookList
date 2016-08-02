@@ -4,15 +4,16 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/ HomeR GET POST
+/ HomeR GET
+/dashboard/ DashboardR GET POST
 
-/library/ LibraryR GET
+/u/#Text/library/ LibraryR GET
 /library/add/ LibraryItemAddR POST
 /library/delete/#LibraryItemId LibraryItemDeleteR GET
 /library/edit/#LibraryItemId LibraryItemEditR GET POST
 /library/toggle/#LibraryItemId LibraryItemToggleStatusR GET
 
-/wishlist/view/#Text WishlistR GET POST
+/u/#Text/wishlist/#Text WishlistR GET POST
 /wishlist/delete/#WishlistId WishlistDeleteR GET
 /wishlist/delete/#WishlistId/#BookId WishlistItemDeleteR GET
 /wishlist/move/#Text/#WishlistItemId WishlistItemMoveR GET

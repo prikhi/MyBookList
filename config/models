@@ -1,14 +1,14 @@
 User
     ident Text
-    password Text Maybe
     UniqueUser ident
     deriving Typeable
 
-Email
-    email Text
-    user UserId Maybe
-    verkey Text Maybe
-    UniqueEmail email
+UserProfile
+    name Text
+    slug Text
+    user UserId
+    UniqueSlug slug
+    UniqueProfile user
 
 Book
     isbn Text
@@ -17,8 +17,13 @@ Book
     UniqueIsbn isbn
     deriving Eq
 
+Library
+    user UserId
+    UserLibrary user
+
 LibraryItem
     book BookId
+    library LibraryId
     rating Double Maybe
     inProgress Bool
     hasFinished Bool
@@ -26,11 +31,12 @@ LibraryItem
     addedOn Day
     firstFinishedOn Day Maybe
     lastFinishedOn Day Maybe
-    UniqueLibraryBook book
+    UniqueLibraryBook library book
 
 Wishlist
     name Text
-    UniqueWishlistName name
+    user UserId
+    UniqueWishlist name user
     deriving Show
 
 WishlistItem

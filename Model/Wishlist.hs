@@ -33,9 +33,9 @@ getMostWantedBooks = runDB $ do
 
 
 -- | A Form for valdating the creation of new Wishlists.
-wishlistForm :: Form Wishlist
-wishlistForm           = renderBootstrap3 BootstrapInlineForm $ Wishlist
-    <$> areq textField nameSettings Nothing
+wishlistForm :: UserId -> Form Wishlist
+wishlistForm user      = renderBootstrap3 BootstrapInlineForm $ Wishlist
+    <$> areq textField nameSettings Nothing <*> pure user
     where nameSettings = withPlaceholder "Wishlist Name" $ bfsText "Name"
 
 -- | A Form for validating creation of WishlistItems from only an ISBN &

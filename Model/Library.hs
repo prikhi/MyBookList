@@ -52,9 +52,10 @@ getFinishedText item = if libraryItemHasFinished item
 
 -- | Create a LibraryItem from a Book. Assumes unrated, not reading and
 -- never completed.
-createLibraryItemFromBook :: BookId -> Handler LibraryItemId
-createLibraryItemFromBook bookId = do
-    creationDay <- utctDay <$> liftIO getCurrentTime
+createLibraryItemFromBook :: UserId -> BookId -> Handler LibraryItemId
+createLibraryItemFromBook userId bookId = do
+    (Entity libraryId _) <- runDB . getBy404 $ UserLibrary userId
+    creationDay          <- utctDay <$> liftIO getCurrentTime
     runDB . insert $ LibraryItem
         { libraryItemBook            = bookId
         , libraryItemRating          = Nothing
@@ -64,6 +65,7 @@ createLibraryItemFromBook bookId = do
         , libraryItemAddedOn         = creationDay
         , libraryItemFirstFinishedOn = Nothing
         , libraryItemLastFinishedOn  = Nothing
+        , libraryItemLibrary         = libraryId
         }
 
 -- | Toggle the inProgress status of a 'LibraryItem'. If finishing a book,
@@ -94,7 +96,8 @@ libraryItemIsbnForm        = renderBootstrap3 BootstrapInlineForm $ id
 libraryItemEditForm :: LibraryItem -> Form LibraryItem
 libraryItemEditForm item = renderBootstrap3 BootstrapBasicForm $
     LibraryItem bookId
-    <$> aopt doubleField (bfsText  "Rating") (Just $ libraryItemRating item)
+    <$> pure (libraryItemLibrary item)
+    <*> aopt doubleField (bfsText  "Rating") (Just $ libraryItemRating item)
     <*> areq checkBoxField (bfsText "Currently Reading?") (Just $ libraryItemInProgress item)
     <*> pure (libraryItemHasFinished item)
     <*> areq intField (bfsText "Times Finished") (Just $ libraryItemCompletionCount item)

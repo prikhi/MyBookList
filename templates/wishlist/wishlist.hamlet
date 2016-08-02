@@ -3,7 +3,7 @@
   <div .col-sm-8 .col-md-offset-1 .col-md-7 .text-center>
     <div .panel .panel-default>
       <div .panel-body>
-        <form method=post action=@{WishlistR name} enctype=#{addBookEnctype}
+        <form method=post action=@{WishlistR userSlug name} enctype=#{addBookEnctype}
               .form-inline>
           ^{addBookWidget}
           <button type=submit .btn .btn-primary>Add Book

@@ -9,10 +9,12 @@ type LibraryItemAndBook = (Entity LibraryItem, Book)
 
 
 -- | Display all LibraryItems.
-getLibraryR :: Handler Html
-getLibraryR = do
+getLibraryR :: Text -> Handler Html
+getLibraryR userSlug = do
+    Entity _ profile   <- runDB $ getBy404 $ UniqueSlug userSlug
+    Entity libraryId _ <- runDB $ getBy404 $ UserLibrary $ userProfileUser profile
+    items   <- runDB $ selectList [LibraryItemLibrary ==. libraryId] []
     sortVal <- getSortValue "status"
-    items   <- runDB $ selectList [] []
     books   <- mapM (\(Entity _ i) -> runDB $ getJust $ libraryItemBook i) items
     let itemsAndBooks = sortLibrary sortVal $ zip items books
     (libraryWidget, libraryEnctype) <- generateFormPost libraryItemIsbnForm

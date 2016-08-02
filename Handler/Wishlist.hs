@@ -11,9 +11,9 @@ import           Util.Widgets (getSortValue, sortWidget, sortListByOption)
 type WishlistItemAndBook = (Entity Book, Entity WishlistItem)
 
 -- | Show the WishlistItems & a form to add Books.
-getWishlistR :: Text -> Handler Html
-getWishlistR name = do
-    (wishlistId, wishlist, booksAndItems, otherLists) <- getStandardWishlistData name
+getWishlistR :: Text -> Text -> Handler Html
+getWishlistR userSlug name = do
+    (wishlistId, wishlist, booksAndItems, otherLists, _) <- getStandardWishlistData userSlug name
     (addBookWidget, addBookEnctype) <- generateFormPost wishlistItemForm
     defaultLayout $ do
         setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
@@ -21,41 +21,44 @@ getWishlistR name = do
         $(widgetFile "wishlist/wishlist")
 
 -- | Process the addition of new Books to the Wishlist.
-postWishlistR :: Text -> Handler Html
-postWishlistR name = do
-    (wishlistId, wishlist, booksAndItems, otherLists) <- getStandardWishlistData name
+postWishlistR :: Text -> Text -> Handler Html
+postWishlistR userSlug name = do
+    (wishlistId, wishlist, booksAndItems, otherLists, userId) <- getStandardWishlistData userSlug name
+    libraryId            <- (\(Entity lId _) -> lId) <$> runDB (getBy404 $ UserLibrary userId)
     ((result, addBookWidget), addBookEnctype)   <- runFormPost wishlistItemForm
     case result of
         FormSuccess formInstance -> do
             bookid       <- fromMaybe (error "create failed") <$>
                             createBookFromIsbn (fst formInstance)
-            mLibraryItem <- runDB $ getBy $ UniqueLibraryBook bookid
+            mLibraryItem <- runDB $ getBy $ UniqueLibraryBook libraryId bookid
             when (isJust mLibraryItem) $ do
                 setMessage "That book is already in your Library"
-                redirect $ WishlistR name
+                redirect $ WishlistR userSlug name
             mItem        <- runDB $ getBy $ WishlistBook wishlistId bookid
             case mItem of
                  Just _  -> setMessage "That Book is already in your Wishlist"
                  Nothing -> runDB (insert $ WishlistItem bookid wishlistId
                                           $ snd formInstance)
                          >> setMessage "Added Book to your Wishlist"
-            redirect $ WishlistR name
+            redirect $ WishlistR userSlug name
         _                        -> defaultLayout $ do
             setTitle $ toHtml $ wishlistName wishlist `mappend` " Wishlist"
             $(widgetFile "wishlist/wishlist")
 
 
 -- | Retrieve variables used in both GET & POST requests
-getStandardWishlistData :: Text
+getStandardWishlistData :: Text -> Text
                         -> Handler (Key Wishlist, Wishlist,
-                                    [WishlistItemAndBook], [Entity Wishlist])
-getStandardWishlistData name = do
+                                    [WishlistItemAndBook], [Entity Wishlist], UserId)
+getStandardWishlistData userSlug name = do
+    userId             <- idFromEntity <$> runDB (getBy404 $ UniqueSlug userSlug)
     sortVal            <- getSortValue "priority"
-    Entity listId list <- runDB . getBy404 $ UniqueWishlistName name
+    Entity listId list <- runDB . getBy404 $ UniqueWishlist name userId
     booksAndItems      <- sortWishlist sortVal <$> getBooksInWishlist listId
     otherLists         <- runDB $ selectList [WishlistName !=. name] []
-    return (listId, list, booksAndItems, otherLists)
+    return (listId, list, booksAndItems, otherLists, userId)
     where sortWishlist       = sortListByOption wishlistSortingOptions
+          idFromEntity (Entity _ profile) = userProfileUser profile
 
 
 -- | Render a dropdown button group for modifying a 'WishlistItemPriority'.

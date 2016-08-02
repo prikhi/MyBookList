@@ -25,6 +25,7 @@ import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
 
 import Handler.Common
 import Handler.Home
+import Handler.Dashboard
 
 import Handler.Library
 import Handler.LibraryItemAdd

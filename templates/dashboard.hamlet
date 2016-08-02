@@ -59,7 +59,7 @@
         <div .col-sm-12>
           <div .panel .panel-info>
             <div .panel-body .text-center>
-              <a href=@{LibraryR} .btn .btn-primary>
+              <a href=@{LibraryR userSlug} .btn .btn-primary>
                 View All
                 <span .glyphicon .glyphicon-forward>
   <!-- Wishlists -->
@@ -103,5 +103,5 @@
                 <ul .list-group>
                   $forall Entity _ wishlist <- wishlists
                     <li .list-group-item>
-                      <a href=@{WishlistR $ wishlistName wishlist}>
+                      <a href=@{WishlistR userSlug $ wishlistName wishlist}>
                         #{wishlistName wishlist}
